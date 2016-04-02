@@ -287,8 +287,8 @@ public class ExtractLatentLink {
     }    
     
     String pathString  = PathConfig.latentFolloweePath;
-    if (!arg.equals("0")) {
-      //writeLatentFollow(PathConfig.latentFollowerPath, latentFollowerMap);
+    if (!Objects.equals(arg, "0")) {
+//      writeLatentFollow(PathConfig.latentFollowerPath, latentFollowerMap);
     } else {
       writeLatentFollow(pathString, latentFolloweeMap);
     }

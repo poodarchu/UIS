@@ -1,18 +1,14 @@
 package me.poodar.uis.social.lda.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import me.poodar.uis.lda.conf.PathConfig;
+import me.poodar.uis.lda.util.Doc;
+import me.poodar.uis.lda.util.Documents;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import me.poodar.uis.lda.conf.PathConfig;
-import me.poodar.uis.lda.util.Doc;
-import me.poodar.uis.lda.util.Documents;
 
 public class GeneralizedPolyaMetric {
   
@@ -23,10 +19,12 @@ public class GeneralizedPolyaMetric {
   public GeneralizedPolyaMetric(Documents documents) {
     doc = documents;
   }
-  
+
+  //读入ExtractTest得到的mutualLink.txt, 返回length最大的mutual[i]
   public int getMax() {
     String mutualData = readData(PathConfig.mutualLinkPath);
     IndexFreq[][] mutual = new IndexFreq [doc.getWordSize()][];
+      //权重是0.3,将mutualData转化为IndexFreq[][] 类型的mutual
     toMatrix(mutualData, mutual , 0.3);
     int j = 0;
     for(int i = 0 ; i < mutual.length ; i ++) {
@@ -50,6 +48,7 @@ public class GeneralizedPolyaMetric {
     IndexFreq[][] FolloweeFreqs = new IndexFreq [doc.getWordSize()][];
     toMatrix(latentIndexData, FolloweeFreqs);
     */
+
     for(int i = 0 ; i < mutual.length ; i++) {
       for(int j = 0 ; j < mutual[i].length ; j++) {
         int swapIndex = (int) (Math.random() * mutual[i].length);
@@ -57,9 +56,11 @@ public class GeneralizedPolyaMetric {
         mutual[i][j] = mutual[i][swapIndex];
         mutual[i][swapIndex] = a;
       }
+//        mutual[i]的长度最大为40
       int size = mutual[i].length > 40 ? 40 : mutual[i].length;
       matrix[i] = new IndexFreq[size];
-      for(int j = 0 ; j< size ; j ++ ) matrix[i][j] = mutual[i][j];
+      for(int j = 0 ; j < size ; j++ )
+          matrix[i][j] = mutual[i][j];
       /*
       int size = mutual[i].length > 15 ? 15 : mutual[i].length;
       matrix[i] = new IndexFreq[size + FolloweeFreqs[i].length + FollowerFreqs[i].length];
@@ -113,9 +114,12 @@ public class GeneralizedPolyaMetric {
     }
   }
 
+
   public void toMatrix(String data, IndexFreq[][] matrix ,Double weigh) {
-    
+
+    //使用'#'分割data
     String[] mutualDataLine = data.split("#");
+    //每次处理已经分个好的一行
     for (String line : mutualDataLine) {
       int index ;
       //String[] tokens;
