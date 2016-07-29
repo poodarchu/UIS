@@ -1,7 +1,0 @@
-TODO list
- - improve speed of Ratings data structure
- - make all recommenders JavaBeans
- - think about a partial Scala port that uses the Java port but exports a more
-   elegant interface
- - support calling Apache Mahout
- - support calling LensKit
